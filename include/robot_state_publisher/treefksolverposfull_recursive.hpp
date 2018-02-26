@@ -23,6 +23,9 @@
 #ifndef KDLTREEFKSOLVERPOSFULL_RECURSIVE_HPP
 #define KDLTREEFKSOLVERPOSFULL_RECURSIVE_HPP
 
+#include <map>
+#include <string>
+
 #include <kdl/tree.hpp>
 #include <tf2/transform_datatypes.h>
 

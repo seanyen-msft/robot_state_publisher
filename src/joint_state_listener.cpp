@@ -34,6 +34,9 @@
 
 /* Author: Wim Meeussen */
 
+#include <map>
+#include <string>
+
 #include <ros/ros.h>
 #include <urdf/model.h>
 #include <kdl/tree.hpp>
@@ -42,9 +45,6 @@
 #include "robot_state_publisher/robot_state_publisher.h"
 #include "robot_state_publisher/joint_state_listener.h"
 
-using namespace std;
-using namespace ros;
-using namespace KDL;
 using namespace robot_state_publisher;
 
 JointStateListener::JointStateListener(const KDL::Tree& tree, const MimicMap& m, const urdf::Model& model)
@@ -64,7 +64,7 @@ JointStateListener::JointStateListener(const KDL::Tree& tree, const MimicMap& m,
   std::string tf_prefix_key;
   n_tilde.searchParam("tf_prefix", tf_prefix_key);
   n_tilde.param(tf_prefix_key, tf_prefix_, std::string(""));
-  publish_interval_ = ros::Duration(1.0/max(publish_freq, 1.0));
+  publish_interval_ = ros::Duration(1.0/std::max(publish_freq, 1.0));
 
   // Setting tcpNoNelay tells the subscriber to ask publishers that connect
   // to set TCP_NODELAY on their side. This prevents some joint_state messages
@@ -121,7 +121,7 @@ void JointStateListener::callbackJointState(const JointStateConstPtr& state)
 
   // determine least recently published joint
   ros::Time last_published = now;
-  for (unsigned int i=0; i<state->name.size(); i++) {
+  for (unsigned int i = 0; i < state->name.size(); i++) {
     ros::Time t = last_publish_time_[state->name[i]];
     last_published = (t < last_published) ? t : last_published;
   }
@@ -131,8 +131,8 @@ void JointStateListener::callbackJointState(const JointStateConstPtr& state)
   // check if we need to publish
   if (ignore_timestamp_ || state->header.stamp >= last_published + publish_interval_) {
     // get joint positions from state message
-    map<string, double> joint_positions;
-    for (unsigned int i=0; i<state->name.size(); i++) {
+    std::map<std::string, double> joint_positions;
+    for (unsigned int i = 0; i < state->name.size(); i++) {
       joint_positions.insert(make_pair(state->name[i], state->position[i]));
     }
 
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 {
   // Initialize ros
   ros::init(argc, argv, "robot_state_publisher");
-  NodeHandle node;
+  ros::NodeHandle node;
 
   ///////////////////////////////////////// begin deprecation warning
   std::string exe_name = argv[0];
