@@ -37,6 +37,8 @@
 #ifndef JOINT_STATE_LISTENER_H
 #define JOINT_STATE_LISTENER_H
 
+#include <boost/scoped_ptr.hpp>
+
 #include <urdf/model.h>
 #include <kdl/tree.hpp>
 #include <ros/ros.h>
