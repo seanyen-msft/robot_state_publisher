@@ -47,6 +47,10 @@
 
 using namespace robot_state_publisher;
 
+JointStateListener::JointStateListener() : JointStateListener(KDL::Tree(), MimicMap())
+{
+}
+
 JointStateListener::JointStateListener(const KDL::Tree& tree, const MimicMap& m, const urdf::Model& model)
   : state_publisher_(tree, model), mimic_(m)
 {
